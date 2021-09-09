@@ -1,10 +1,9 @@
-# TFM_Attendance_System_with_Blockchain
-Thesis Project
-# README.MD
-Here you will find the code to implemet Biometric Work Attendance Management and Logging with a Blockchain System, as a part of my Thesis for MSc in Internet of Things
+# TFM Attendance System with Blockchain
+
+Here you will find the code to implemet Biometric Work Attendance Management and Logging with a Blockchain System, as a part of my Thesis Project for MSc in Internet of Things
 
 ## Content
-This project consists on the development of an end-to-end prototype for generating , collecting, storing, and getting reports about employee attendance time, using a decentralized app executed on web browser, peer-to-peer InterPlanetary File System (IPFS), and smart contracts from Ethereum blockchain.
+This project consists on the development of an end-to-end prototype for generating , collecting, storing, and getting reports about employee attendance time, using a decentralized app (DApp) executed on web browser, peer-to-peer InterPlanetary File System (IPFS), and smart contracts from Ethereum blockchain.
 
 
 ## List of Material
@@ -18,6 +17,7 @@ OLED Display | 0.96" SSD1306 I2C  | [https://amzn.to/3d19h7C](https://amzn.to/3d
 
 ## How to clone Arduino codes
 I recommend to follow step by step implementation
+* Download *IoT_device* directory with all Arduino codes
 * Use CH341SER for USB driver recognition of NodeMCU board
 * Test NodeMCU functions using blink leds. 
 * Test Wi-Fi connection (change parameters on code)
@@ -49,6 +49,6 @@ npm run serve
 http://localhost:9011/
 
 ## Preview
-Insert here an image of the preview if your project has one. The image can be into the project, you have to indicate the route and look like this.
+This is the network architecture deployed.
 
 ![](/preview.png)
