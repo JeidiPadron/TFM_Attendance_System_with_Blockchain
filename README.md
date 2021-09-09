@@ -2,8 +2,9 @@
 
 Here you will find the code to implemet Biometric Work Attendance Management and Logging with a Blockchain System, as a part of my Thesis Project for MSc in Internet of Things
 
-## Content
+## Summary
 This project consists on the development of an end-to-end prototype for generating , collecting, storing, and getting reports about employee attendance time, using a decentralized app (DApp) executed on web browser, peer-to-peer InterPlanetary File System (IPFS), and smart contracts from Ethereum blockchain.
+Open *Attendance System with Blockchain* folder to download the document with complete description, instructions to configure and test.
 
 
 ## List of Material
@@ -37,11 +38,11 @@ DApp connects with blockchain, to store Attendance Report in blockchain
 * Download Node.js program from web
 * copy *DAppTimeLog* directory in your laptop
 * install MetaMask extension in your browser
-* To install and run DApp just type and execute
+* To install libraries and depencencies, just type and execute
 ```bash
 npm install
 ```
-
+* To interact with DApp, write this command in the same DApp directory 
 ```bash
 npm run serve
 ```

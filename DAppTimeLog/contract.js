@@ -26,19 +26,17 @@ const onboarding = new MetamaskOnboarding({ forwarderOrigin });
 
 // Basic Actions Section
 const onboardButton = document.getElementById('connectButton');
-
-//show account connected
-//const accountsDiv = document.getElementById('accounts')
+const accountsDiv = document.getElementById('accounts')
 
 // Store Attendance Report Section
 const company_cif_write = document.getElementById('company_cif_write');
 const date_write = document.getElementById('date_write');
-const addReportButton = document.getElementById('addReport');
+const appendLogButton = document.getElementById('append_log');
 
 // Read Attendance Section
 const company_cif_read = document.getElementById('company_cif_read');
 const date_read = document.getElementById('date_read');
-const getReportButton = document.getElementById('get_log');
+const getLogButton = document.getElementById('get_log');
 
 // Smart contract where is deployed TIMELOG contract
 const ContractAccountAddress = '0x3Bb37250390a96f6dc99fEDD6386359C03CFABA4';
@@ -140,21 +138,29 @@ const initialize = () => {
         return Boolean(ethereum && ethereum.isMetaMask);
     };
 
+    const accountButtons = [
+        appendLogButton,
+        getLogButton,
+    ]
+
     // Show ether account in case of Metamask is connected
     let accounts
+    let accountButtonsInitialized = false
     const isMetaMaskConnected = () => accounts && accounts.length > 0
 
-    //Start the onboarding proccess, new windows to MetaMask installation page
+
     const onClickInstall = () => {
+        //Start the onboarding proccess, new windows to MetaMask installation page
         onboardButton.innerText = 'Onboarding in progress';
         onboardButton.disabled = true;
         onboarding.startOnboarding();
     };
 
-    //Will open small windows: the MetaMask UI
-    //You should disable this button while the request is pending!
-    //Show new MetaMask windows to select account to be connected
+
     const onClickConnect = async () => {
+        //Will open small windows: the MetaMask UI
+        //You should disable this button while the request is pending!
+        //Show new MetaMask windows to select account to be connected    
         try {
             const newAccounts = await ethereum.request({
                 method: 'eth_requestAccounts',
@@ -166,12 +172,43 @@ const initialize = () => {
         }
     }
 
-    //Check if MetaMask is installed  
+    const updateButtons = () => {
+        const accountButtonsDisabled = !isMetaMaskInstalled() || !isMetaMaskConnected()
+        if (accountButtonsDisabled) {
+            for (const button of accountButtons) {
+                button.disabled = true
+            }
+        } else {
+            appendLogButton.disabled = false
+            getLogButton.disabled = false
+        }
+
+
+
+    }
+
+    const initializeAccountButtons = () => {
+        if (accountButtonsInitialized) {
+            return
+        }
+        accountButtonsInitialized = true
+
+    }
+
+    function handleNewAccounts(newAccounts) {
+        accounts = newAccounts
+        accountsDiv.innerHTML = accounts
+        if (isMetaMaskConnected()) {
+            initializeAccountButtons()
+        }
+        updateButtons()
+    }
+
     const MetamaskClientCheck = async () => {
+        //Check if MetaMask is installed
         if (!isMetaMaskInstalled()) {
             //If it isn't installed we ask the user to click to install it
-            onboardButton.innerText = 'Click here to install MetaMask!';
-            onboardButton.onclick = onClickInstall;
+            onboardButton.innerText = 'Click here to install MetaMask!'; onboardButton.onclick = onClickInstall;
             onboardButton.disabled = false;
         } else if (isMetaMaskConnected()) {
             //If it is installed we change our button text
@@ -186,25 +223,17 @@ const initialize = () => {
             onboardButton.onclick = onClickConnect
             onboardButton.disabled = false
         }
-    };
-
-    MetamaskClientCheck();
-
-    function handleNewAccounts(newAccounts) {
-        accounts = newAccounts
-        accountsDiv.innerHTML = accounts
-        if (isMetaMaskConnected()) {
-            initializeAccountButtons()
-        }
-        updateButtons()
     }
 
-};
 
+    updateButtons()
+
+    MetamaskClientCheck();
+};
 
 /*
 *********************************
-     Document Object Model (DOM)
+   Document Object Model (DOM)
 *********************************
 */
 // Load HTML page 
@@ -222,6 +251,7 @@ const signer = provider.getSigner();
 const myContract = new ethers.Contract(ContractAccountAddress, ABI, provider);
 const myContractWithSignature = myContract.connect(signer);
 
+
 /*
 *********************************
      Define IPFS server and metadata
@@ -231,7 +261,7 @@ const myContractWithSignature = myContract.connect(signer);
 var fileData = '';
 
 //On click element in file explorer, process file
-const fileSelector = document.getElementById('daily_log_file');
+const fileSelector = document.getElementById('daily_report');
 fileSelector.addEventListener('change', (evento) => {
     fileData = evento.target.files[0];
     console.log(fileData);
@@ -240,26 +270,35 @@ fileSelector.addEventListener('change', (evento) => {
 //Instanciated IPFS external node, named Infura
 //check IpfsHttpClient library is defined on html scripts section
 //check IpfsHttpClient was previously imported in html file
-const ipfs = window.IpfsHttpClient({ host: 'ipfs.infura.io', port: 5001 })
+//const ipfs = window.IpfsHttpClient({ host: 'ipfs.infura.io', port: 5001 })
+const ipfs = window.IpfsHttpClient.create({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 
 /*
 *********************************
      Save Daily log report on IPFS
 *********************************
 */
-addReportButton.onclick = async () => {
+appendLogButton.onclick = async () => {
     try {
         let company = company_cif_write.value;
-        console.log(company);
-        let date_write = date_write.value;
-        console.log(date_write);
+        let date = date_write.value;
+        newDate = date.split(" ")[0]
+        format = newDate.split("-");
+        let year = format[0];
+        let month = format[1];
+        let day = format[2];
+
         //Insert daily report file on IPFS
         let result = await ipfs.add(fileData);
+        console.log(ContractAccountAddress)
+        console.log("RESULT")
+        console.log(result)    //it is an object
         //Get the hash for uploaded file into blockchain
         let _url = "http://ipfs.io/ipfs/" + result.cid.string;
         console.log(_url);
-        //Upload the event to Ethereum
-        console.log(await myContractWithSignature.addnewevent(company, date_write, _url));
+        //Upload the daily report to Ethereum
+        //the variables must be identical as defined on Smart Contract
+        console.log(await myContractWithSignature.append_log(company, year, month, day, _url));
     } catch (error) {
         console.error(error);
     }
@@ -270,11 +309,16 @@ addReportButton.onclick = async () => {
      Get Daily log registry
 *********************************
 */
-getReportButton.onclick = async () => {
+getLogButton.onclick = async () => {
     try {
         let company = company_cif_read.value;
-        let date_read = date_read.value;
-        let result = await myContract.append_log(company, date_read);
+        let date = date_read.value;
+        newDate = date.split(" ")[0]
+        format = newDate.split("-");
+        let year = format[0];
+        let month = format[1];
+        let day = format[2];
+        let result = await myContract.get_log(company, year, month, day);
         //Se muestran en una pequeña tabla con su respectivo hipervículo a la dirección en IPFS donde se encuentren alojados
         //En JS se puede "inyectar" código HTML en cualquier elemento teniendo únicamente su id
         document.getElementById("contenedor").innerHTML = '<table>'
