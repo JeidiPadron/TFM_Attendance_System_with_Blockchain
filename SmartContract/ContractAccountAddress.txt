@@ -1,0 +1,17 @@
+TIMELOG contract
+hash: https://ropsten.etherscan.io/tx/0xfa2da61a1918ecdfdc22e78411cd92aca00e44a75b1ef4519e802c7e4c2259bd
+address 0x3Bb37250390a96f6dc99fEDD6386359C03CFABA4
+
+Function
+   append_log
+	_company
+	year
+	month
+	day
+	-log
+
+   get_log
+	_company
+	year
+	month
+	day	

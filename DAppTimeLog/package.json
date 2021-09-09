@@ -1,0 +1,38 @@
+{
+  "name": "dapptimelog",
+  "version": "1.0.0",
+  "description": "Building DApp using MetaMask",
+  "main": ".eslintrc.js",
+  "files": [
+    "/contract.js",
+    "/index.html"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git"
+  },
+  "author": "MetaMask",
+  "license": "MIT",
+  "dependencies": {
+    "@metamask/onboarding": "^0.2.1",
+    "eth-sig-util": "^3.0.1",
+    "ethers": "^5.4.6",
+    "ipfs-core": "^0.8.0",
+    "ipfs-http-client": "^50.1.2",
+    "web3": "^1.3.6"
+  },
+  "devDependencies": {
+    "@metamask/eslint-config": "^2.2.0",
+    "eslint": "^7.29.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-json": "^2.0.1",
+    "static-server": "^2.2.1"
+  },
+  "scripts": {
+    "deploy": "./deploy.sh",
+    "lint": "eslint . --ext js,json",
+    "lint:fix": "eslint . --fix --ext js,json",
+    "serve": "static-server . --port 9011",
+    "test": "npm run lint"
+  }
+}
