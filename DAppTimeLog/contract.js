@@ -32,6 +32,8 @@ const accountsDiv = document.getElementById('accounts')
 const company_cif_write = document.getElementById('company_cif_write');
 const date_write = document.getElementById('date_write');
 const appendLogButton = document.getElementById('append_log');
+const urlDiv = document.getElementById('url_result');
+url_result
 
 // Read Attendance Section
 const company_cif_read = document.getElementById('company_cif_read');
@@ -261,7 +263,7 @@ const myContractWithSignature = myContract.connect(signer);
 var fileData = '';
 
 //On click element in file explorer, process file
-const fileSelector = document.getElementById('daily_report');
+const fileSelector = document.getElementById('fileToUpload');
 fileSelector.addEventListener('change', (evento) => {
     fileData = evento.target.files[0];
     console.log(fileData);
@@ -296,12 +298,20 @@ appendLogButton.onclick = async () => {
         //Get the hash for uploaded file into blockchain
         let _url = "http://ipfs.io/ipfs/" + result.cid.string;
         console.log(_url);
+        handleNewUrl(_url);
         //Upload the daily report to Ethereum
         //the variables must be identical as defined on Smart Contract
         console.log(await myContractWithSignature.append_log(company, year, month, day, _url));
     } catch (error) {
         console.error(error);
     }
+
+    function handleNewUrl(_url) {
+        url_result = _url
+        urlDiv.innerHTML = url_result
+    }
+
+
 }
 
 /*
@@ -322,7 +332,7 @@ getLogButton.onclick = async () => {
         //Se muestran en una pequeña tabla con su respectivo hipervículo a la dirección en IPFS donde se encuentren alojados
         //En JS se puede "inyectar" código HTML en cualquier elemento teniendo únicamente su id
         document.getElementById("contenedor").innerHTML = '<table>'
-            + '<tr><td> Primer archivo: </td><td><a href="' + result[1] + '">' + result[0] + '</a>'
+            + '<tr><td> Daily Report: </td><td><a href="' + result[1] + '">' + result[0] + '</a>'
             + '</table>';
     } catch (error) {
         console.error(error);

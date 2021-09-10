@@ -39,16 +39,16 @@
               </button>
 
 
-              <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
-                <p class="info-text alert alert-success">
-                  Ether Accounts: <span id="accounts"></span>
-                </p>
-              </div>
 
-
+              <p class="info-text alert alert-success">
+                Ether Accounts: <span id="accounts"></span>
+              </p>
             </div>
+
+
           </div>
         </div>
+      </div>
       </div>
     </section> <br>
     <!-- /Part 1 -->
@@ -74,11 +74,15 @@
                 <br>File to upload: <br>
               </label><br>
 
-              <input type="file" id="daily_report"></input><br>
+              <input type="file" id="fileToUpload"></input><br>
 
               <button class="btn btn-primary btn-lg btn-block mb-3" id="append_log">
                 Add Attendance Report
               </button>
+
+              <p class="info-text alert alert-success">
+                IPFS address: <span id="url_result"></span>
+              </p>
 
             </div>
           </div>
@@ -102,18 +106,23 @@
               <button class="btn btn-primary btn-lg btn-block mb-3" id="get_log">
                 Get Attendance Report
               </button>
+
+              <p class="info-text alert alert-secondary">
+                Daily Log Report: <span id="contenedor"></span>
+              </p>
+
+
             </div>
           </div>
         </div>
+
+      </div>
 
 
       </div>
     </section>
 
-    <section>
-      <div id="contenedor">
-      </div>
-    </section> <br>
+
 
   </main>
 
