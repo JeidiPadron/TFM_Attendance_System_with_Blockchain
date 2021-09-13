@@ -33,7 +33,7 @@ const company_cif_write = document.getElementById('company_cif_write');
 const date_write = document.getElementById('date_write');
 const appendLogButton = document.getElementById('append_log');
 const urlDiv = document.getElementById('url_result');
-url_result
+
 
 // Read Attendance Section
 const company_cif_read = document.getElementById('company_cif_read');
@@ -296,7 +296,15 @@ appendLogButton.onclick = async () => {
         console.log("RESULT")
         console.log(result)    //it is an object
         //Get the hash for uploaded file into blockchain
-        let _url = "http://ipfs.io/ipfs/" + result.cid.string;
+        //let _url = "http://ipfs.io/ipfs/" + result.cid.string;
+
+        /*           MANUAL TEST  
+        let _url = "http://ipfs.io/ipfs/" + "QmNcExGbAwLHnkeAjxvnTrpMyZNSSnwmHWi2vaFHitEfH5";        
+        */
+
+
+        let _url = "http://ipfs.io/ipfs/" + result.path;
+
         console.log(_url);
         handleNewUrl(_url);
         //Upload the daily report to Ethereum
@@ -329,13 +337,14 @@ getLogButton.onclick = async () => {
         let month = format[1];
         let day = format[2];
         let result = await myContract.get_log(company, year, month, day);
-        //Se muestran en una pequeña tabla con su respectivo hipervículo a la dirección en IPFS donde se encuentren alojados
+        //Se muestran un hipervículo a la dirección en IPFS donde se encuentren alojados
         //En JS se puede "inyectar" código HTML en cualquier elemento teniendo únicamente su id
         document.getElementById("contenedor").innerHTML = '<table>'
-            + '<tr><td> Daily Report: </td><td><a href="' + result[1] + '">' + result[0] + '</a>'
+            + '<a href="' + result + '">' + result + '</a>'
             + '</table>';
+        //<p><a href="TestFile/ExcelFile.xlsx" download> Click to Download </a></p>
+
     } catch (error) {
         console.error(error);
     }
 }
-
